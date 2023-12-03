@@ -2,12 +2,14 @@
 const color = useColorMode()
 
 function toggleDark() {
-    color.value = color.value === 'dark' 
-    ? 'light' 
+  color.value = color.value === 'dark'
+    ? 'light'
     : 'dark'
 }
 </script>
 
 <template>
-    <button @click="toggleDark">{{ color.value }}</button>
+  <button @click="toggleDark">
+    {{ color.value }}
+  </button>
 </template>
