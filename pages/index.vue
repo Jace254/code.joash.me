@@ -7,8 +7,5 @@ function toggleDark() {
 </script>
 
 <template>
-    <div text-red>
-        Hello World X: {{ x }}, Y: {{ y }}
-    </div>
     <button @click="toggleDark">{{ color.value }}</button>
 </template>
