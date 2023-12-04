@@ -11,11 +11,11 @@ function toggleDark() {
 <template>
   <div grid grid-cols="[1fr_2fr]" h-full  >
     <div b-r b-base>
-      Col 1
+      Content
       <button @click="toggleDark">
         {{ color.value }}
       </button>
     </div>
-    <div>Col 2</div>
+    <div>Playground</div>
   </div>
 </template>
