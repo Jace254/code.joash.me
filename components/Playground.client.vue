@@ -5,19 +5,28 @@ async function startDevServer() {
   const wc = await useWebContainer()
 
   console.log('mounting')
-  wc.mount({
+  await wc.mount({
     'package.json': {
       file: {
         contents: JSON.stringify({
           private: true,
+          scripts: {
+            dev: 'nuxt dev',
+          },
           dependencies: {
             nuxt: 'latest',
           },
-          name: 'my-app',
-        }),
+        }, null, 2),
       },
     },
   })
+
+
+  wc.on('server-ready', (port, url) => {
+    console.log('server-ready', port, url)
+    iframe.value!.src = url
+  })
+
   console.log('installing')
   const installProcess = await wc.spawn('npm', ['install'])
 
@@ -29,7 +38,6 @@ async function startDevServer() {
   console.log('running')
   // `npm run dev`
   await wc.spawn('npm', ['run', 'dev'])
-  wc.on('server-ready', (port, url) => (iframe.value!.src = url))
 }
 
 onMounted(startDevServer)
