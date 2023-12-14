@@ -15,6 +15,7 @@
     "@iconify/json": "^2.2.157",
     "@tanstack/vue-table": "^8.10.7",
     "@unocss/extractor-mdc": "^0.58.0",
+    "@webcontainer/api": "^1.1.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "radix-vue": "^1.2.4"
