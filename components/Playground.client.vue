@@ -10,24 +10,25 @@ const error = shallowRef<{ message: string }>()
 const stream = ref<ReadableStream>()
 
 async function startDevServer() {
+  const rawFiles = import.meta.glob([
+    '../templates/nuxt/*.*',
+    '!**/node_modules/**',
+  ], { as: 'raw', eager: true })
+
+  const files = Object.fromEntries(
+    Object.entries(rawFiles).map(([path, content]) => {
+      return [path.replace('../templates/nuxt/', ''), {
+        file: {
+          contents: content,
+        },
+      }]
+    }),
+  )
+  
   const wc = await useWebContainer()
 
   status.value = 'mount'
-  await wc.mount({
-    'package.json': {
-      file: {
-        contents: JSON.stringify({
-          private: true,
-          scripts: {
-            dev: 'nuxt dev',
-          },
-          dependencies: {
-            nuxt: 'latest',
-          },
-        }, null, 2),
-      },
-    },
-  })
+  await wc.mount(files)
 
   wc.on('server-ready', (port, url) => {
     status.value = 'ready'
