@@ -2,10 +2,12 @@
 const iframe = ref<HTMLIFrameElement>()
 const wcUrl = ref<string>()
 
-type Status = 'init' | 'mount' | 'install' | 'ready' | 'start' | 'error'
+type Status = 'initialize' | 'mount' | 'install' | 'ready' | 'start' | 'error'
 
-const status = ref<Status>('init')
+const status = ref<Status>('initialize')
 const error = shallowRef<{ message: string }>()
+
+const stream = ref<ReadableStream>()
 
 async function startDevServer() {
   const wc = await useWebContainer()
@@ -39,7 +41,8 @@ async function startDevServer() {
 
   status.value = 'install'
   // `npm install`
-  const installProcess = await wc.spawn('npm', ['install'])
+  const installProcess = await wc.spawn('pnpm', ['install'])
+  stream.value = installProcess.output
   const installExitCode = await installProcess.exit
 
   if (installExitCode !== 0) {
@@ -52,7 +55,8 @@ async function startDevServer() {
 
   status.value = 'start'
   // `npm run dev`
-  await wc.spawn('npm', ['run', 'dev'])
+  const devProcess = await wc.spawn('pnpm', ['dev'])
+  stream.value = devProcess.output
 }
 watchEffect(() => {
   if (iframe.value && wcUrl.value)
@@ -62,9 +66,12 @@ onMounted(startDevServer)
 </script>
 
 <template>
-  <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
-  <div w-full h-full flex="~ col items-center justify-center" capitalize text-lg>
-    <div i-svg-spinners-blocks-shuffle-3 />
-    {{ status }}ing...
+  <div h-full w-full grid grid-rows="[2fr_1fr]" of-hidden relative max-h-full>
+    <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
+    <div v-if="status !== 'ready'" flex="~ col items-center justify-center" h-full capitalize text-lg>
+      <div i-svg-spinners-blocks-shuffle-3 />
+      {{ status }}ing...
+    </div>
+    <Terminal :stream="stream" h="33%" />
   </div>
 </template>

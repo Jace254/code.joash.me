@@ -40,7 +40,7 @@ export function presetShadcn(_options: PresetShadcnOptions = {}): Preset<Theme> 
             --border: 20 5.9% 90%;
             --input: 20 5.9% 90%;
             --ring: 24.6 95% 53.1%;
-            --radius: 0.3rem;
+            --radius: 0.5rem;
           }
          
           .dark {
