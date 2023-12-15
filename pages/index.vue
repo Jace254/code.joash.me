@@ -3,7 +3,7 @@
     <div b-r b-base p4>
       Content
     </div>
-    <div p4>
+    <div>
       <Playground />
     </div>
   </div>

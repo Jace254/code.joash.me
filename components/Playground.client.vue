@@ -1,10 +1,16 @@
 <script setup lang="ts">
 const iframe = ref<HTMLIFrameElement>()
+const wcUrl = ref<string>()
+
+type Status = 'init' | 'mount' | 'install' | 'ready' | 'start' | 'error'
+
+const status = ref<Status>('init')
+const error = shallowRef<{ message: string }>()
 
 async function startDevServer() {
   const wc = await useWebContainer()
 
-  console.log('mounting')
+  status.value = 'mount'
   await wc.mount({
     'package.json': {
       file: {
@@ -21,30 +27,44 @@ async function startDevServer() {
     },
   })
 
-
   wc.on('server-ready', (port, url) => {
-    console.log('server-ready', port, url)
-    iframe.value!.src = url
+    status.value = 'ready'
+    wcUrl.value = url
   })
 
-  console.log('installing')
-  const installProcess = await wc.spawn('npm', ['install'])
+  wc.on('error', (err) => {
+    error.value = err
+    status.value = 'error'
+  })
 
+  status.value = 'install'
+  // `npm install`
+  const installProcess = await wc.spawn('npm', ['install'])
   const installExitCode = await installProcess.exit
 
-  if (installExitCode !== 0)
+  if (installExitCode !== 0) {
+    error.value = {
+      message: `Unable to run npm install, exit as ${installExitCode}`,
+    }
+    status.value = 'error'
     throw new Error('Unable to run npm install')
+  }
 
-  console.log('running')
+  status.value = 'start'
   // `npm run dev`
   await wc.spawn('npm', ['run', 'dev'])
 }
-
+watchEffect(() => {
+  if (iframe.value && wcUrl.value)
+    iframe.value.src = wcUrl.value
+})
 onMounted(startDevServer)
 </script>
 
 <template>
-  <div>
-    <iframe ref="iframe" />
+  <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
+  <div w-full h-full flex="~ col items-center justify-center" capitalize text-lg>
+    <div i-svg-spinners-blocks-shuffle-3 />
+    {{ status }}ing...
   </div>
 </template>
