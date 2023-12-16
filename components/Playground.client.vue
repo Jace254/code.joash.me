@@ -2,9 +2,9 @@
 const iframe = ref<HTMLIFrameElement>()
 const wcUrl = ref<string>()
 
-type Status = 'initialize' | 'mount' | 'install' | 'ready' | 'start' | 'error'
+type Status = 'init' | 'mount' | 'install' | 'ready' | 'start' | 'error'
 
-const status = ref<Status>('initialize')
+const status = ref<Status>('init')
 const error = shallowRef<{ message: string }>()
 
 const stream = ref<ReadableStream>()
@@ -24,7 +24,7 @@ async function startDevServer() {
       }]
     }),
   )
-  
+
   const wc = await useWebContainer()
 
   status.value = 'mount'
@@ -69,9 +69,11 @@ onMounted(startDevServer)
 <template>
   <div h-full w-full grid grid-rows="[2fr_1fr]" of-hidden relative max-h-full>
     <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
-    <div v-if="status !== 'ready'" flex="~ col items-center justify-center" h-full capitalize text-lg>
+    <div v-if="status !== 'ready'" flex="~ col items-center justify-center" capitalize text-lg>
       <div i-svg-spinners-blocks-shuffle-3 />
-      {{ status }}ing...
+      <p v-if="status !== 'init'">
+        {{ status }}ing...
+      </p>
     </div>
     <Terminal :stream="stream" h="33%" />
   </div>

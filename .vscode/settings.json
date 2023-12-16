@@ -5,6 +5,7 @@
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,
+  "editor.fontFamily": "Consolas, 'Courier New', monospace",
 
   // Auto fix
   "editor.codeActionsOnSave": {
