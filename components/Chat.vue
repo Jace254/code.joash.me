@@ -24,7 +24,7 @@ watch(() => messages.value, async (m) => {
   </form>
   <article prose>
     <div class="whitespace-pre-wrap">
-      <ContentRenderer :value="parsedMarkdown" />
+      <ContentRenderer v-show="parsedMarkdown !== undefined" :value="parsedMarkdown" />
     </div>
   </article>
 </template>
