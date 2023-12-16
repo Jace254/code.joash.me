@@ -8,7 +8,7 @@ function toggleMode() {
 
 <template>
   <button
-    rounded p-2
+    rounded p-1
     hover="bg-active"
     @click="toggleMode"
   >
