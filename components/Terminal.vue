@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
+import { FitAddon } from 'xterm-addon-fit'
 
 const props = defineProps<{
   stream?: ReadableStream
@@ -9,6 +10,7 @@ const props = defineProps<{
 const root = ref<HTMLDivElement>()
 
 const terminal = new Terminal()
+const fitAddon = new FitAddon()
 
 watch(() => props.stream, (s) => {
   if (!s)
@@ -24,7 +26,10 @@ watch(() => props.stream, (s) => {
   read()
 }, { immediate: true })
 
-onMounted(() => terminal.open(root.value!))
+onMounted(() => {
+  terminal.open(root.value!)
+  fitAddon.fit()
+})
 </script>
 
 <template>
