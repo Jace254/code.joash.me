@@ -21,7 +21,7 @@ export function presetShadcn(_options: PresetShadcnOptions = {}): Preset<Theme> 
           @keyframes shadcn-exit { to{ opacity: var(--un-exit-opacity, 1); transform: translate3d(var(--un-exit-translate-x, 0), var(--un-exit-translate-y, 0), 0) scale3d(var(--un-exit-scale, 1), var(--un-exit-scale, 1), var(--un-exit-scale, 1)) rotate(var(--un-exit-rotate, 0)) } }
         
           :root {
-            --background: 0 0% 100%;
+            --background: 68 100% 90%;
             --foreground: 20 14.3% 4.1%;
             --card: 0 0% 100%;
             --card-foreground: 20 14.3% 4.1%;
@@ -44,7 +44,7 @@ export function presetShadcn(_options: PresetShadcnOptions = {}): Preset<Theme> 
           }
          
           .dark {
-            --background: 20 14.3% 4.1%;
+            --background: 284 98% 6%;
             --foreground: 60 9.1% 97.8%;
             --card: 20 14.3% 4.1%;
             --card-foreground: 60 9.1% 97.8%;
