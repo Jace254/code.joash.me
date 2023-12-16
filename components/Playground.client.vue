@@ -58,6 +58,12 @@ async function startDevServer() {
   // `npm run dev`
   const devProcess = await wc.spawn('pnpm', ['dev'])
   stream.value = devProcess.output
+
+  if(import.meta.hot) {
+    import.meta.hot.accept(() => {
+      devProcess.kill()
+    })
+  }
 }
 watchEffect(() => {
   if (iframe.value && wcUrl.value)
@@ -67,7 +73,7 @@ onMounted(startDevServer)
 </script>
 
 <template>
-  <div h-full w-full grid grid-rows="[2fr_1fr]" of-hidden relative max-h-full>
+  <div max-h-full w-full grid grid-rows="[2fr_1fr]" of-hidden relative>
     <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
     <div v-if="status !== 'ready'" flex="~ col items-center justify-center" capitalize text-lg>
       <div i-svg-spinners-blocks-shuffle-3 />
@@ -75,6 +81,6 @@ onMounted(startDevServer)
         {{ status }}ing...
       </p>
     </div>
-    <Terminal :stream="stream" h="33%" />
+    <Terminal :stream="stream" min-h-0 />
   </div>
 </template>
