@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Pane, Splitpanes } from 'splitpanes'
 import { globToWebContainerFs } from '@/composables/webContainer'
 
 const iframe = ref<HTMLIFrameElement>()
@@ -71,14 +72,21 @@ onMounted(startDevServer)
 </script>
 
 <template>
-  <div max-h-full w-full grid grid-rows="[2fr_1fr]" of-hidden relative>
-    <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
-    <div v-if="status !== 'ready'" flex="~ col items-center justify-center" capitalize text-lg>
-      <div i-svg-spinners-blocks-shuffle-3 />
-      <p v-if="status !== 'init'">
-        {{ status }}ing...
-      </p>
-    </div>
-    <Terminal :stream="stream" min-h-0 />
-  </div>
+  <Splitpanes max-h-full w-full horizontal of-hidden relative>
+    <Pane>
+      [Editor]
+    </Pane>
+    <Pane>
+      <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
+      <div v-if="status !== 'ready'" flex="~ col items-center justify-center" capitalize text-lg>
+        <div i-svg-spinners-blocks-shuffle-3 />
+        <p v-if="status !== 'init'">
+          {{ status }}ing...
+        </p>
+      </div>
+    </Pane>
+    <Pane>
+      <Terminal :stream="stream" min-h-0 />
+    </Pane>
+  </Splitpanes>
 </template>

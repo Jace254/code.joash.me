@@ -1,11 +1,34 @@
+<script setup lang="ts">
+import { Pane, Splitpanes } from 'splitpanes'
+
+const isDragging = ref<boolean>(false)
+const leftSize = useLocalStorage('codeground-left-panel', 30)
+
+function start() {
+  isDragging.value = true
+}
+
+function stop(e: { size: number }[]) {
+  isDragging.value = false
+  leftSize.value = e[0].size
+}
+</script>
+
 <template>
-  <div
-    grid grid-cols="[1fr_2fr]"
+  <Splitpanes
     h-full of-hidden max-h-full
+    @resize="start"
+    @resized="stop"
   >
-    <div b-r b-base>
+    <Pane :size="leftSize">
       <Chat />
-    </div>
-    <Playground />
-  </div>
+    </Pane>
+    <Pane>
+      <Playground
+        :class="{
+          'pointer-events-none': isDragging,
+        }"
+      />
+    </Pane>
+  </Splitpanes>
 </template>

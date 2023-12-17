@@ -11,6 +11,7 @@ const root = ref<HTMLDivElement>()
 
 const terminal = new Terminal()
 const fitAddon = new FitAddon()
+terminal.loadAddon(fitAddon)
 
 watch(() => props.stream, (s) => {
   if (!s)
@@ -26,6 +27,8 @@ watch(() => props.stream, (s) => {
   read()
 }, { immediate: true })
 
+useResizeObserver(root, useDebounceFn(() => fitAddon.fit(), 200))
+
 onMounted(() => {
   terminal.open(root.value!)
   fitAddon.fit()
@@ -33,5 +36,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="root" />
+  <div ref="root" h-full w-full of-hidden />
 </template>
