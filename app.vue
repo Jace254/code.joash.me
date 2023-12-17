@@ -39,10 +39,10 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-    --at-apply: "!bg-muted";
+    --at-apply: "bg-muted";
 }
 ::-webkit-scrollbar-thumb {
-    --at-apply: "rounded-sm !bg-muted-foreground/30";
+    --at-apply: "rounded-sm bg-muted-foreground/30";
 }
 
 /* Firefox */

@@ -16,14 +16,23 @@ export default defineLazyEventHandler(async () => {
       messages: ChatCompletionMessageParam[]
     }
 
+    const systemMessage: ChatCompletionMessageParam = {
+      role: 'system',
+      content:
+        'Only answer questions about NodeJS, NodeJS frameworks and libraries that run on the NodeJS runtime or javascript frontend frameworks. Return only Markdown documentation with no explanation.',
+    }
+
+    // @ts-expect-error vendor
+    const prompt: ChatCompletionMessageParam = {
+      content: messages[messages.length - 1].content,
+      role: 'user',
+    }
+
     // Ask OpenAI for a streaming chat completion given the prompt
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       stream: true,
-      messages: messages.map(message => ({
-        content: message.content,
-        role: message.role,
-      })),
+      messages: [systemMessage, prompt],
     })
 
     const stream = OpenAIStream(response)

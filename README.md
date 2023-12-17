@@ -25,7 +25,10 @@ The development server will be running at [http://localhost:3000](http://localho
 - [x] Setup WebContainer
 - [x] Setup ai for autocompletion
 - [ ] Setup a basic editor
+- [ ] Setup split panels
+- [ ] Enable zip download
 - [ ] Add a file tree
+- [ ] Add playground history
 
 ## License
 
