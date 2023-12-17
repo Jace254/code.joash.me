@@ -9,31 +9,34 @@ import { cn } from '@/utils'
 const parsedMarkdown = ref<Record<string, any> | undefined>(undefined)
 
 const { messages, input, handleSubmit, isLoading } = useChat()
-const data = ref<string>('')
 
 watch(() => messages.value, async (m) => {
-  data.value = m[m.length - 1] && m[m.length - 1].role !== 'user' ? m[m.length - 1].content : ''
-  if (data.value !== '')
-    parsedMarkdown.value = await markdownParser.parse!('', data.value, {})
+  const data = m[m.length - 1] && m[m.length - 1].role !== 'user' ? m[m.length - 1].content : ''
+  if (data !== '')
+    parsedMarkdown.value = await markdownParser.parse!('', data, {})
 })
 </script>
 
 <template>
-  <form flex w-full p-4 @submit="handleSubmit">
-    <Input
-      v-model="input"
-      class="w-full p-2 mb-8 mr-2 bg-faded"
-      placeholder="Ask me anything related to node..."
-    />
-    <UiButton :disabled="isLoading" @click="handleSubmit">
-      <div :class="cn(isLoading ? 'i-svg-spinners-270-ring' : 'i-zondicons-send')" />
-    </UiButton>
-  </form>
-  <UiScrollArea h-72>
-    <article prose p4>
-      <div class="whitespace-pre-wrap max-w-72">
+  <div h-full grid="~ rows-[min-content_1fr]">
+    <div flex="~ gap-2 items-center" border="b base dashed" bg-faded px4 py2>
+      <div i-ph-book-bookmark-duotone/>
+      <span text-sm>AI Guide</span>
+    </div>
+    <form flex w-full p-4 @submit="handleSubmit">
+      <Input
+        v-model="input"
+        class="w-full p-2 mr-2 bg-faded"
+        placeholder="Ask me anything related to node..."
+      />
+      <UiButton :disabled="isLoading" @click="handleSubmit">
+        <div :class="cn(isLoading ? 'i-svg-spinners-270-ring' : 'i-zondicons-send')" />
+      </UiButton>
+    </form>
+    <UiScrollArea>
+      <article class="prose" of-auto p6>
         <ContentRenderer v-show="parsedMarkdown !== undefined" :value="parsedMarkdown" />
-      </div>
-    </article>
-  </UiScrollArea>
+      </article>
+    </UiScrollArea>
+  </div>
 </template>

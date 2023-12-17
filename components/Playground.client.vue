@@ -74,11 +74,24 @@ onMounted(startDevServer)
 <template>
   <Splitpanes max-h-full w-full horizontal of-hidden relative>
     <Pane>
-      [Editor]
+      <div
+        h-full
+        grid="~ rows-[min-content_1fr]"
+      >
+        <div
+          flex="~ gap-2 items-center"
+          border="b base dashed"
+          bg-faded px4 py2
+        >
+          <div i-ph-code-block-duotone />
+          <span text-sm>Playground</span>
+        </div>
+        [Editor]
+      </div>
     </Pane>
     <Pane>
       <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
-      <div v-if="status !== 'ready'" flex="~ col items-center justify-center" capitalize text-lg>
+      <div v-if="status !== 'ready'" flex="~ col items-center justify-center" h-full capitalize text-lg>
         <div i-svg-spinners-blocks-shuffle-3 />
         <p v-if="status !== 'init'">
           {{ status }}ing...
