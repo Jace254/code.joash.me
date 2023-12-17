@@ -1,6 +1,8 @@
 # CodeGround
 
-![logo]("https://github.com/Jace254/code.joash.me/blob/main/logo.svg?raw=true")
+<p align="center">
+  <img src="./logo.svg" style="width:500px;height:200px;"/>
+</p>
 
 ## Development
 
