@@ -19,7 +19,7 @@ watch(() => messages.value, async (m) => {
 </script>
 
 <template>
-  <form flex w-full @submit="handleSubmit">
+  <form flex w-full p-4 @submit="handleSubmit">
     <Input
       v-model="input"
       class="w-full p-2 mb-8 mr-2 bg-faded"
@@ -29,9 +29,11 @@ watch(() => messages.value, async (m) => {
       <div :class="cn(isLoading ? 'i-svg-spinners-270-ring' : 'i-zondicons-send')" />
     </UiButton>
   </form>
-  <article prose>
-    <div class="whitespace-pre-wrap">
-      <ContentRenderer v-show="parsedMarkdown !== undefined" :value="parsedMarkdown" />
-    </div>
-  </article>
+  <UiScrollArea h-72>
+    <article prose p4>
+      <div class="whitespace-pre-wrap max-w-72">
+        <ContentRenderer v-show="parsedMarkdown !== undefined" :value="parsedMarkdown" />
+      </div>
+    </article>
+  </UiScrollArea>
 </template>

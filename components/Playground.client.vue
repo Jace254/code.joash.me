@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { globToWebContainerFs } from '@/composables/webContainer'
+
 const iframe = ref<HTMLIFrameElement>()
 const wcUrl = ref<string>()
 
@@ -10,25 +12,21 @@ const error = shallowRef<{ message: string }>()
 const stream = ref<ReadableStream>()
 
 async function startDevServer() {
-  const rawFiles = import.meta.glob([
-    '../templates/nuxt/*.*',
-    '!**/node_modules/**',
-  ], { as: 'raw', eager: true })
-
-  const files = Object.fromEntries(
-    Object.entries(rawFiles).map(([path, content]) => {
-      return [path.replace('../templates/nuxt/', ''), {
-        file: {
-          contents: content,
-        },
-      }]
+  const tree = globToWebContainerFs(
+    '../templates/nuxt/',
+    import.meta.glob([
+      '../templates/nuxt/*.*',
+      '!**/node_modules/**',
+    ], {
+      as: 'raw',
+      eager: true,
     }),
   )
 
   const wc = await useWebContainer()
 
   status.value = 'mount'
-  await wc.mount(files)
+  await wc.mount(tree)
 
   wc.on('server-ready', (port, url) => {
     status.value = 'ready'
@@ -59,7 +57,7 @@ async function startDevServer() {
   const devProcess = await wc.spawn('pnpm', ['dev'])
   stream.value = devProcess.output
 
-  if(import.meta.hot) {
+  if (import.meta.hot) {
     import.meta.hot.accept(() => {
       devProcess.kill()
     })
