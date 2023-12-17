@@ -15,20 +15,26 @@ function stop(e: { size: number }[]) {
 </script>
 
 <template>
-  <Splitpanes
-    h-full of-hidden max-h-full
-    @resize="start"
-    @resized="stop"
+  <div
+    h-100dvh h-screen w-screen of-hidden
+    grid="~ rows-[max-content_1fr]" bg-base
   >
-    <Pane :size="leftSize">
-      <Chat />
-    </Pane>
-    <Pane>
-      <Playground
-        :class="{
-          'pointer-events-none': isDragging,
-        }"
-      />
-    </Pane>
-  </Splitpanes>
+    <TheNav />
+    <Splitpanes
+      h-full of-hidden
+      @resize="start"
+      @resized="stop"
+    >
+      <Pane :size="leftSize">
+        <Chat />
+      </Pane>
+      <Pane>
+        <Playground
+          :class="{
+            'pointer-events-none': isDragging,
+          }"
+        />
+      </Pane>
+    </Splitpanes>
+  </div>
 </template>

@@ -1,17 +1,74 @@
-.splitpanes--vertical>.splitpanes__splitter {
-    --uno: border border-base;
-    width: 4px;
+/* Splitpanes */
+.splitpanes--vertical > .splitpanes__splitter {
+    width: 16px;
+    margin: 0 -8px;
+    background: transparent;
+    z-index: 10;
+    position: relative;
+    transition: background 0.2s ease;
+}
+.splitpanes--vertical > .splitpanes__splitter:hover {
+    background: #8882;
+}
+.splitpanes--vertical > .splitpanes__splitter:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    --uno: border-r border-base;
 }
 
-.splitpanes--horizontal>.splitpanes__splitter {
-    --uno: border border-base;
-    height: 4px;
+.splitpanes--horizontal > .splitpanes__splitter {
+    height: 16px;
+    margin: -8px 0;
+    background: transparent;
+    z-index: 10;
+    position: relative;
+    transition: background 0.2s ease;
+}
+.splitpanes--horizontal > .splitpanes__splitter:hover {
+    background: #8882;
+}
+.splitpanes--horizontal > .splitpanes__splitter:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    --uno: border-b border-base;
 }
 
-.splitpanes--vertical .splitpanes__pane {
-    transition: none;
+.splitpanes__splitter:has(+ .pane-hidden) {
+    display: none;
 }
 
-.splitpanes--horizontal .splitpanes__pane {
-    transition: none;
+/* Xterm */
+.terminal.xterm {
+    height: 100%;
+    padding: 0 1.5em;
+}
+
+.terminal.xterm .xterm-rows {
+    --uno: font-mono;
+}
+
+/* Floating Vue */
+.v-popper--theme-dropdown .v-popper__inner {
+    --uno: bg-base border-base border;
+    color: inherit;
+}
+
+.v-popper__popper .v-popper__arrow-outer {
+    --uno: border-base;
+}
+
+.v-popper__popper .v-popper__arrow-inner {
+    --uno: border-white dark-border-[#020420];
+}
+
+.v-popper {
+    --uno: flex items-center justify-center;
 }

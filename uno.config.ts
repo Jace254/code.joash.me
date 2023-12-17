@@ -14,7 +14,7 @@ export default defineConfig({
   shortcuts: {
     'border-base': 'border-gray-200 dark:border-gray-800',
     'bg-active': 'bg-gray:10',
-    'bg-faded': 'bg-gray:5',
+    'bg-faded': 'bg-gray:6',
     'bg-base': 'bg-background',
     'animate-accordion-up': 'accordion-up',
     'animate-accordion-down': 'accordion-down',

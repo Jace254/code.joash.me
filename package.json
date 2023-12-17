@@ -20,13 +20,15 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "openai": "^4.22.1",
-    "radix-vue": "^1.2.4"
+    "radix-vue": "^1.2.4",
+    "splitpanes": "^3.1.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.2.2",
     "@nuxt/content": "^2.9.0",
     "@nuxt/devtools": "latest",
     "@nuxtjs/color-mode": "^3.3.2",
+    "@types/splitpanes": "^2.2.6",
     "@unocss/nuxt": "^0.58.0",
     "@vueuse/nuxt": "^10.6.1",
     "eslint": "^8.55.0",
