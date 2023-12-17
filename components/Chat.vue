@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useChat } from 'ai/vue'
+
+// @ts-expect-error vendor
 import markdownParser from '@nuxt/content/transformers/markdown'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/utils'
 
 const parsedMarkdown = ref<Record<string, any> | undefined>(undefined)
 
@@ -23,8 +26,7 @@ watch(() => messages.value, async (m) => {
       placeholder="Ask me anything related to node..."
     />
     <UiButton :disabled="isLoading" @click="handleSubmit">
-      <div v-if="isLoading" i-svg-spinners-270-ring/>
-      <div v-if="!isLoading" i-zondicons-send/>
+      <div :class="cn(isLoading ? 'i-svg-spinners-270-ring' : 'i-zondicons-send')" />
     </UiButton>
   </form>
   <article prose>
