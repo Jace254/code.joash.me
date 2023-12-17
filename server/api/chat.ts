@@ -19,7 +19,7 @@ export default defineLazyEventHandler(async () => {
     const systemMessage: ChatCompletionMessageParam = {
       role: 'system',
       content:
-        'Only answer questions about NodeJS, NodeJS frameworks and libraries that run on the NodeJS runtime or javascript frontend frameworks. Return only Markdown documentation with no explanation.',
+        'You identify as Andy. Only answer questions about NodeJS, NodeJS frameworks and libraries that run on the NodeJS runtime or javascript frontend frameworks. Return only Markdown format documentation and include code examples do not give extra text before or after the markdown.',
     }
 
     // @ts-expect-error vendor
