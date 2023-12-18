@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Pane, Splitpanes } from 'splitpanes'
 import { globToWebContainerFs } from '@/composables/webContainer'
+import { usePanelDragging } from '@/composables/state';
 
 const iframe = ref<HTMLIFrameElement>()
 const wcUrl = ref<string>()
@@ -9,6 +10,12 @@ type Status = 'init' | 'mount' | 'install' | 'ready' | 'start' | 'error'
 
 const status = ref<Status>('init')
 const error = shallowRef<{ message: string }>()
+
+const isDragging = usePanelDragging()
+
+const panelSizeEditor = useLocalStorage('codeground-right-panel-editor', 30)
+const panelSizePreview = useLocalStorage('codeground-right-panel-preview', 30)
+
 
 const stream = ref<ReadableStream>()
 
@@ -64,6 +71,17 @@ async function startDevServer() {
     })
   }
 }
+
+function startDragging() {
+  isDragging.value = true
+}
+
+function endDragging(e: { size: number }[]) {
+  isDragging.value = false
+  panelSizeEditor.value = e[0].size;
+  panelSizePreview.value = e[1].size
+
+}
 watchEffect(() => {
   if (iframe.value && wcUrl.value)
     iframe.value.src = wcUrl.value
@@ -72,8 +90,11 @@ onMounted(startDevServer)
 </script>
 
 <template>
-  <Splitpanes max-h-full w-full horizontal of-hidden relative>
-    <Pane>
+  <Splitpanes 
+  max-h-full w-full 
+  horizontal of-hidden relative
+  @resize="startDragging" @resized="endDragging">
+    <Pane :size="panelSizeEditor">
       <div
         h-full
         grid="~ rows-[min-content_1fr]"
@@ -89,7 +110,7 @@ onMounted(startDevServer)
         [Editor]
       </div>
     </Pane>
-    <Pane>
+    <Pane :size="panelSizePreview">
       <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
       <div v-if="status !== 'ready'" flex="~ col items-center justify-center" h-full capitalize text-lg>
         <div i-svg-spinners-blocks-shuffle-3 />

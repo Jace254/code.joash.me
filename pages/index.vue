@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { usePanelDragging } from '@/composables/state';
 import { Pane, Splitpanes } from 'splitpanes'
 
-const isDragging = ref<boolean>(false)
+const isDragging = usePanelDragging()
 const leftSize = useLocalStorage('codeground-left-panel', 30)
 
 function start() {
