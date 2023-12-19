@@ -1,16 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { execaSync } from 'execa'
 
-
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    '@vueuse/nuxt', 
-    '@unocss/nuxt', 
-    '@nuxtjs/color-mode', 
+    '@vueuse/nuxt',
+    '@unocss/nuxt',
+    '@nuxtjs/color-mode',
     '@nuxt/content',
     '@pinia/nuxt',
     'floating-vue/nuxt',
+    '~/modules/template-loader'
   ],
   colorMode: {
     classSuffix: '',
