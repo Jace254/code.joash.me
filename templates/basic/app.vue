@@ -1,5 +1,5 @@
 <template>
   <div>
-    Hello World
+    Hello Joash & Lil P
   </div>
 </template>
