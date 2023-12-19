@@ -8,6 +8,7 @@
       <ColorSchemeToggle />
       <NuxtLink
         href="https://github.com/Jace254/code.joash.me"
+        target="_blank"
         rounded p-2
         hover="bg-active"
       >

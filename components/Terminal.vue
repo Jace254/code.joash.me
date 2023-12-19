@@ -36,5 +36,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="root" h-full w-full of-hidden />
+
+<div
+        h-full
+        grid="~ rows-[min-content_1fr]"
+      >
+        <div
+          flex="~ gap-2 items-center"
+          border="b base"
+          bg-faded px4 py2
+        >
+        <div i-ic-twotone-terminal />
+          <span text-sm>Terminal</span>
+        </div>
+        <div ref="root"  w-full of-hidden />
+
+      </div>
 </template>
