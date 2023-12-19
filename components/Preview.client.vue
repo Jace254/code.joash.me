@@ -1,97 +1,80 @@
 <script setup lang="ts">
-import { globToWebContainerFs } from '@/composables/webContainer'
-import { useTerminalStream } from "@/composables/state"
+const play = usePlaygroundStore()
 
-const iframe = ref<HTMLIFrameElement>()
-const wcUrl = ref<string>()
+const inputUrl = ref<string>('')
+const inner = ref<{ iframe?: HTMLIFrameElement | undefined }>()
 
-type Status = 'init' | 'mount' | 'install' | 'ready' | 'start' | 'error'
+// auto update inputUrl when location value changed
+syncRef(computed(() => play.previewLocation.fullPath), inputUrl, { direction: 'ltr' })
 
-const status = ref<Status>('init')
-const error = shallowRef<{ message: string }>()
-
-const stream = useTerminalStream()
-
-async function startDevServer() {
-  const tree = globToWebContainerFs(
-    '../templates/nuxt/',
-    import.meta.glob([
-      '../templates/nuxt/*.*',
-      '!**/node_modules/**',
-    ], {
-      as: 'raw',
-      eager: true,
-    }),
-  )
-
-  const wc = await useWebContainer()
-
-  status.value = 'mount'
-  await wc.mount(tree)
-
-  wc.on('server-ready', (port, url) => {
-    if(port === 3000){
-        status.value = 'ready'
-        wcUrl.value = url
-    }
-  })
-
-  wc.on('error', (err) => {
-    error.value = err
-    status.value = 'error'
-  })
-
-  status.value = 'install'
-  // `npm install`
-  const installProcess = await wc.spawn('pnpm', ['install'])
-  stream.value = installProcess.output
-  const installExitCode = await installProcess.exit
-
-  if (installExitCode !== 0) {
-    error.value = {
-      message: `Unable to run npm install, exit as ${installExitCode}`,
-    }
-    status.value = 'error'
-    throw new Error('Unable to run npm install')
-  }
-
-  status.value = 'start'
-  // `npm run dev`
-  const devProcess = await wc.spawn('pnpm', ['dev'])
-  stream.value = devProcess.output
-
-  if (import.meta.hot) {
-    import.meta.hot.accept(() => {
-      devProcess.kill()
-    })
+function refreshIframe() {
+  play.updatePreviewUrl()
+  if (play.previewUrl && inner.value?.iframe) {
+    inner.value.iframe.src = play.previewUrl
+    inputUrl.value = play.previewLocation.fullPath
   }
 }
-watchEffect(() => {
-  if (iframe.value && wcUrl.value)
-    iframe.value.src = wcUrl.value
-})
-onMounted(startDevServer)
+
+watch(
+  () => play.status,
+  (status) => {
+    if (status === 'ready' || status === 'start')
+      refreshIframe()
+  },
+  { flush: 'sync' },
+)
+
+function navigate() {
+  play.previewLocation.fullPath = inputUrl.value
+  play.updatePreviewUrl()
+  const activeElement = document.activeElement
+  if (activeElement instanceof HTMLElement)
+    activeElement.blur()
+}
 </script>
 
 <template>
+  <div h-full :class="play.status === 'ready' ? ' grid grid-rows-[min-content_1fr]' : 'flex'">
     <div
-        h-full
-        grid="~ rows-[min-content_1fr]"
-      >
+      v-if="play.status === 'ready'"
+      flex="~ items-center gap-2"
+      border="b base dashed" bg-faded pl4 pr2
+    >
+      <div flex="~ gap-2 items-center" py2>
+        <div i-ph-globe-duotone />
+        <span text-sm>Preview</span>
+      </div>
+      <div flex px-2 py1>
         <div
-          flex="~ gap-2 items-center"
-          border="b base"
-          bg-faded px4 py2
+          flex="~ items-center justify-center"
+          mx-auto min-w-100 w-full rounded bg-faded px2 text-sm
+          border="base 1 hover:gray-500/30"
+          :class="{
+            'pointer-events-none': !play.previewUrl,
+          }"
         >
-          <div i-ph-globe-duotone />
-          <span text-sm>Preview</span>
-        </div>
-        <iframe v-show="status === 'ready'" ref="iframe" h-full w-full />
-        <div v-if="status !== 'ready'" flex="~ col items-center justify-center" h-full capitalize text-lg>
-          <div i-svg-spinners-180-ring-with-bg />
-          <p v-if="status !== 'init'">
-            {{ status }}ing...
-          </p>
+          <form w-full @submit.prevent="navigate">
+            <input
+              v-model="inputUrl" type="text"
+              w-full flex-1 bg-transparent focus:outline-none
+            >
+          </form>
+          <div flex="~ items-center justify-end">
+            <button
+              v-if="play.previewUrl"
+              mx1 op-75 hover:op-100
+              @click="refreshIframe"
+            >
+              <div i-ph-arrow-clockwise-duotone text-sm />
+            </button>
+          </div>
         </div>
       </div>
+      <div flex-auto />
+    </div>
+    <div relative h-full w-full>
+      <PreviewLoading />
+      <PreviewClient ref="inner" />
+    </div>
+  </div>
 </template>

@@ -1,42 +1,96 @@
 <script setup lang="ts">
 import { Pane, Splitpanes } from 'splitpanes'
-import { usePanelDragging, useTerminalStream } from '@/composables/state';
 
-
-const isDragging = usePanelDragging()
-const stream = useTerminalStream()
-
-const panelSizeEditor = useLocalStorage('codeground-right-panel-editor', 30)
-const panelSizePreview = useLocalStorage('codeground-right-panel-preview', 30)
+const ui = useUiState()
 
 function startDragging() {
-  isDragging.value = true
+  ui.isPanelDragging = true
 }
 
-function endDragging(e: { size: number }[]) {
-  isDragging.value = false
-  panelSizeEditor.value = e[0].size;
-  panelSizePreview.value = e[1].size
-
+function endDraggingVertical(e: { size: number }[]) {
+  ui.isPanelDragging = false
+  ui.panelDocs = e[0].size
 }
+
+function endDraggingHorizontal(e: { size: number }[]) {
+  ui.isPanelDragging = false
+  ui.panelEditor = e[0].size
+  ui.panelPreview = e[1].size
+}
+
+const terminalPaneProps = computed(() => {
+  if (ui.showTerminal) {
+    return {
+      size: 100 - ui.panelEditor - ui.panelPreview,
+    }
+  }
+  else {
+    return {
+      size: 0,
+      maxSize: 0,
+    }
+  }
+})
+
+// For panes size initialization on SSR
+const isMounted = useMounted()
+const panelInitDocs = computed(() => isMounted.value || {
+  width: `${ui.panelDocs}%`,
+})
+const panelInitRight = computed(() => isMounted.value || {
+  width: `${100 - ui.panelDocs}%`,
+})
+const panelInitEditor = computed(() => isMounted.value || {
+  height: `${ui.panelEditor}%`,
+})
+const panelInitPreview = computed(() => isMounted.value || {
+  height: `${ui.panelPreview}%`,
+})
+const panelInitTerminal = computed(() => isMounted.value || {
+  height: `${100 - ui.panelEditor - ui.panelPreview}%`,
+})
 </script>
 
 <template>
-  <Splitpanes 
-  max-h-full w-full 
-  horizontal of-hidden relative
-  @resize="startDragging" @resized="endDragging">
-    <Pane :size="panelSizeEditor">
-      <!-- Editor -->
-      <Editor/>
+  <Splitpanes
+    h-full of-hidden
+    @resize="startDragging"
+    @resized="endDraggingVertical"
+  >
+    <Pane
+      :size="ui.panelDocs" min-size="10"
+      :style="panelInitDocs"
+    >
+      <Chat />
     </Pane>
-    <Pane :size="panelSizePreview">
-      <!-- Preview -->
-      <Preview/>
-    </Pane>
-    <Pane>
-      <!-- Terminal -->
-      <Terminal :stream="stream" min-h-0 />
+    <Pane
+      :size="100 - ui.panelDocs"
+      :style="panelInitRight"
+    >
+      <Splitpanes
+
+        horizontal relative max-h-full w-full of-hidden
+        @resize="startDragging"
+        @resized="endDraggingHorizontal"
+      >
+        <Pane :size="ui.panelEditor" min-size="10" :style="panelInitEditor">
+          <!-- Editor -->
+          <Editor />
+        </Pane>
+        <PaneSplitter />
+        <Pane :size="ui.panelPreview" min-size="10" :style="panelInitPreview">
+          <!-- Preview -->
+          <Preview />
+        </Pane>
+        <PaneSplitter />
+        <Pane
+          v-bind="terminalPaneProps" :style="panelInitTerminal"
+          :class="ui.showTerminal ? '' : 'pane-hidden'"
+        >
+          <!-- Terminal -->
+          <Terminal />
+        </Pane>
+      </Splitpanes>
     </Pane>
   </Splitpanes>
 </template>
