@@ -30,8 +30,10 @@ async function startDevServer() {
   await wc.mount(tree)
 
   wc.on('server-ready', (port, url) => {
-    status.value = 'ready'
-    wcUrl.value = url
+    if(port === 3000){
+        status.value = 'ready'
+        wcUrl.value = url
+    }
   })
 
   wc.on('error', (err) => {
