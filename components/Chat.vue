@@ -20,13 +20,13 @@ watch(() => messages.value, async (m) => {
 <template>
   <div h-full grid="~ rows-[min-content_1fr]">
     <div flex="~ gap-2 items-center" border="b base dashed" bg-faded px4 py2>
-      <div i-ph-book-bookmark-duotone/>
+      <div i-ph-book-bookmark-duotone />
       <span text-sm>AI Guide</span>
     </div>
-    <form flex w-full p-4 @submit="handleSubmit">
+    <form w-full flex p-4 @submit="handleSubmit">
       <Input
         v-model="input"
-        class="w-full p-2 mr-2 bg-faded"
+        class="mr-2 w-full bg-faded p-2"
         placeholder="Ask me anything related to node..."
       />
       <UiButton :disabled="isLoading" @click="handleSubmit">
