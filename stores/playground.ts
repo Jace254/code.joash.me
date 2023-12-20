@@ -68,7 +68,7 @@ export const usePlaygroundStore = defineStore('playground', () => {
             origin: url,
             fullPath: '/',
           }
-          status.value = 'ready'
+          status.value = 'start'
         }
       })
 
@@ -199,7 +199,7 @@ export const usePlaygroundStore = defineStore('playground', () => {
     const link = document.createElement('a')
     link.href = url
     // TODO: have a better name with the current tutorial name
-    link.download = `nuxt-playground-${dateString}.zip`
+    link.download = `CodeGround-${dateString}.zip`
     link.click()
     link.remove()
     URL.revokeObjectURL(url)

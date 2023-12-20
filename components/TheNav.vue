@@ -3,7 +3,7 @@ const ui = useUiState()
 const play = usePlaygroundStore()
 const runtime = useRuntimeConfig()
 
-const repo = 'https://github.com/nuxt/learn.nuxt.com'
+const repo = 'https://github.com/Jace254/code.joash.me'
 const buildTime = new Date(runtime.public.buildTime)
 const timeAgo = useTimeAgo(buildTime)
 </script>
