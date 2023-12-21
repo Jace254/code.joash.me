@@ -32,6 +32,7 @@ The development server will be running at [http://localhost:3000](http://localho
 - [x] Add a file tree
 - [ ] Add playground history
 - [ ] Mount AI Files
+- [ ] Enable manual adding files
 - [x] Add pinia state management
 
 ## License
