@@ -2,6 +2,7 @@
 import { Pane, Splitpanes } from 'splitpanes'
 
 const ui = useUiState()
+const play = usePlaygroundStore()
 
 function startDragging() {
   ui.isPanelDragging = true
@@ -75,7 +76,7 @@ const panelInitTerminal = computed(() => isMounted.value || {
       >
         <Pane :size="ui.panelEditor" min-size="10" :style="panelInitEditor">
           <!-- Editor -->
-          <Editor />
+          <Editor :files="play.files" />
         </Pane>
         <PaneSplitter />
         <Pane :size="ui.panelPreview" min-size="10" :style="panelInitPreview">
