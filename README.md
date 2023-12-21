@@ -26,12 +26,12 @@ The development server will be running at [http://localhost:3000](http://localho
 
 - [x] Setup WebContainer
 - [x] Setup ai for autocompletion
-- [ ] Setup a basic editor
+- [x] Setup a basic editor
 - [x] Setup split panels
 - [x] Enable zip download
-- [ ] Add a file tree
+- [x] Add a file tree
 - [ ] Add playground history
-- [ ] Add editor
+- [ ] Mount AI Files
 - [x] Add pinia state management
 
 ## License
