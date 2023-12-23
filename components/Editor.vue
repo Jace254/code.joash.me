@@ -13,6 +13,7 @@ const props = withDefaults(
 )
 
 const ui = useUiState()
+const play = usePlaygroundStore()
 
 const files = computed(() => props.files.filter(file => !isFileIgnored(file.filepath)))
 const directory = computed(() => filesToVirtualFsTree(files.value))
@@ -69,8 +70,27 @@ const panelInitEditor = computed(() => isMounted.value || {
       border="b base dashed"
       bg-faded px4 py2
     >
-      <div i-ph-text-t-duotone />
+      <div i-ph-code-block-duotone text-xl/>
       <span text-sm>Editor</span>
+      <div flex-auto />
+      <button
+        v-if="play.status === 'ready'"
+        rounded 
+        hover="bg-active"
+        title="Download as ZIP"
+        @click="play.downloadZip()"
+      >
+        <div i-ph-download-duotone text-xl />
+      </button>
+      <button
+        rounded 
+        title="Toggle terminal"
+        hover="bg-active"
+        :class="ui.showTerminal ? '' : 'op50'"
+        @click="ui.toggleTerminal()"
+      >
+        <div i-ph-terminal-window-duotone text-xl />
+      </button>
     </div>
     <Splitpanes
       @resize="startDragging"

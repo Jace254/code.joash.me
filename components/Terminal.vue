@@ -10,7 +10,7 @@ const play = usePlaygroundStore()
       border="b base dashed"
       bg-faded p2 pl4
     >
-      <div i-ic-twotone-terminal />
+      <div i-ic-twotone-terminal text-xl/>
       <span text-sm>Terminal</span>
       <div flex-auto />
       <button

@@ -10,7 +10,7 @@ function startDragging() {
 
 function endDraggingVertical(e: { size: number }[]) {
   ui.isPanelDragging = false
-  ui.panelDocs = e[0].size
+  ui.panelDocs = e[1].size
 }
 
 function endDraggingHorizontal(e: { size: number }[]) {
@@ -59,12 +59,6 @@ const panelInitTerminal = computed(() => isMounted.value || {
     @resized="endDraggingVertical"
   >
     <Pane
-      :size="ui.panelDocs" min-size="10"
-      :style="panelInitDocs"
-    >
-      <Chat />
-    </Pane>
-    <Pane
       :size="100 - ui.panelDocs"
       :style="panelInitRight"
     >
@@ -92,6 +86,13 @@ const panelInitTerminal = computed(() => isMounted.value || {
           <Terminal />
         </Pane>
       </Splitpanes>
+    </Pane>
+    <PaneSplitter/>
+    <Pane
+      :size="ui.panelDocs" min-size="10"
+      :style="panelInitDocs"
+    >
+      <Chat />
     </Pane>
   </Splitpanes>
 </template>

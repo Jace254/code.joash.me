@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const ui = useUiState()
-const play = usePlaygroundStore()
 const runtime = useRuntimeConfig()
 
 const repo = 'https://github.com/Jace254/code.joash.me'
@@ -9,21 +7,12 @@ const timeAgo = useTimeAgo(buildTime)
 </script>
 
 <template>
-  <header border-b border-border bg-faded py-3>
+  <header border-b border-border bg-faded py-1.5>
     <nav max-w-8xl mx-auto h-full flex items-center gap-3 px-4 lg:px-8 sm:px-6>
       <NuxtLink to="/" title="CodeGround">
-        <Logo h-2em />
+        <Logo />
       </NuxtLink>
       <div flex-auto />
-      <button
-        v-if="play.status === 'ready'"
-        rounded p2
-        hover="bg-active"
-        title="Download as ZIP"
-        @click="play.downloadZip()"
-      >
-        <div i-ph-download-duotone text-2xl />
-      </button>
       <VDropdown :distance="6">
         <button
           rounded p2
@@ -43,15 +32,6 @@ const timeAgo = useTimeAgo(buildTime)
           </div>
         </template>
       </VDropdown>
-      <button
-        rounded p2
-        title="Toggle terminal"
-        hover="bg-active"
-        :class="ui.showTerminal ? '' : 'op50'"
-        @click="ui.toggleTerminal()"
-      >
-        <div i-ph-terminal-window-duotone text-2xl />
-      </button>
       <ColorSchemeToggle />
       <NuxtLink
         href="https://github.com/Jace254/code.joash.me"

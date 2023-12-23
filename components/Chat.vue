@@ -20,7 +20,7 @@ watch(() => messages.value, async (m) => {
 <template>
   <div h-full grid="~ rows-[min-content_1fr]">
     <div flex="~ gap-2 items-center" border="b base dashed" bg-faded px4 py2>
-      <div i-ph-book-bookmark-duotone />
+      <div i-ph-book-bookmark-duotone text-xl/>
       <span text-sm>AI Guide</span>
     </div>
     <form w-full flex p-4 @submit="handleSubmit">
@@ -34,7 +34,7 @@ watch(() => messages.value, async (m) => {
       </UiButton>
     </form>
     <UiScrollArea>
-      <article class="prose" of-auto p6>
+      <article class="prose" max-w-full of-auto p6>
         <ContentRenderer v-show="parsedMarkdown !== undefined" :value="parsedMarkdown" />
       </article>
     </UiScrollArea>
